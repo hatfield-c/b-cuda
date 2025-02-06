@@ -43,4 +43,24 @@ struct Rigidbody {
 		this->AddForce(velocity_drag_force);
 		this->AddForce(wind_drag_force);
 	}
+
+	Vector3 Right() {
+		return Quaternion::RotatePoint(Vector::RIGHT(), this->rotation);
+	}
+
+	Vector3 Up() {
+		return Quaternion::RotatePoint(Vector::UP(), this->rotation);
+	}
+
+	Vector3 Forward() {
+		return Quaternion::RotatePoint(Vector::FORWARD(), this->rotation);
+	}
+
+	Vector4 ForwardQuaternion() {
+		Vector3 up = this->Up();
+		Vector4 delta = Quaternion::QuaternionFromEulerParams(up, Math::Pi() / 2);
+
+		return Quaternion::MultiplyQuaternions(delta, this->rotation, true);
+	}
+
 };
