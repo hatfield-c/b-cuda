@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Physics.h"
 #include "Transform.h"
 #include "Quaternion.h"
 
 struct Rigidbody {
+	float delta_time = 1/ 20;
 	float mass = 1;
 	Vector3 position = Vector::ZERO3();
 	Vector4 rotation{ 0, 0, 0, 1 };
@@ -16,14 +16,14 @@ struct Rigidbody {
 	}
 
 	void Update() {
-		this->position += this->velocity * Physics::DeltaTime();
+		this->position += this->velocity * this->delta_time;
 
-		Vector4 quaternion_delta = Quaternion::QuaternionFromEulerAngles(this->angular_velocity * Physics::DeltaTime());
+		Vector4 quaternion_delta = Quaternion::QuaternionFromEulerAngles(this->angular_velocity * this->delta_time);
 		this->rotation = Quaternion::MultiplyQuaternions(quaternion_delta, this->rotation, true);
 	}
 
 	void Accelerate(Vector3 acceleration) {
-		this->velocity += acceleration * Physics::DeltaTime();
+		this->velocity += acceleration * this->delta_time;
 	}
 
 	void AddForce(Vector3 force) {
@@ -31,7 +31,7 @@ struct Rigidbody {
 	}
 
 	void AddTorque(Vector3 torque) {
-		this->angular_velocity += torque * Physics::DeltaTime();
+		this->angular_velocity += torque * this->delta_time;
 	}
 
 	void AirResistance(Vector3 wind) {
